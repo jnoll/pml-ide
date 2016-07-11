@@ -1,21 +1,26 @@
+{-# LANGUAGE DeriveDataTypeable #-}
+
 import Control.Monad.Trans (liftIO)
+import qualified Data.ByteString.Lazy as BS
+import qualified Data.ByteString.Lazy.UTF8 as B8
 import Data.List (intercalate)
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust, fromMaybe)
 import Network.CGI       -- See http://hackage.haskell.org/package/cgi
 import System.Process    -- (createProcess, CreateProcess, proc) 
 import System.Exit (ExitCode(ExitSuccess))
 import System.IO (readFile, hGetContents, hGetLine, hPutStr, hClose)
 import System.IO.Error (isEOFError, tryIOError)
-import Text.XHtml        
+import Text.JSON.Generic
 
+data Result = Result {
+      input :: String
+    , results :: String
+} deriving (Show, Data, Typeable)
 
-page :: Maybe String -> String -> Html
-page p r  = 
-  let np = intercalate "\n" $ map (\(n, l) -> (show n) ++ ": " ++ l) $ zip [1..] $ lines $ fromJust p in
-  body << (h1 << "Results" +++ h3 << "pmlcheck output" +++ pre  << r +++ h3 << "input PML code" +++ pre <<  np)
+page :: String -> String -> String
+page p r = encodeJSON $ Result { input = p, results = r }
 
-
-pmlcheck :: String -> IO String
+pmlcheck :: BS.ByteString -> IO String
 pmlcheck pml = do
   (Just hin, Just hout, Just herr, jHandle) <-
     createProcess (proc "/home/jnoll/bin/pmlcheck" [])
@@ -25,8 +30,7 @@ pmlcheck pml = do
            , std_err = CreatePipe 
            }
 
-  tryIOError $ hPutStr hin pml
---  tryIOError $ hClose hin
+  tryIOError $ BS.hPutStr hin pml
   tryIOError $ hClose hin
   result <- tryIOError $ hGetContents hout
   err <- tryIOError $  hGetContents herr
@@ -47,10 +51,10 @@ pmlcheck pml = do
 
 cgiMain :: CGI CGIResult
 cgiMain = do
-  p <- getInput "editedText"
-  r <- liftIO $ pmlcheck $ fromJust  p
-  let o = page p r in 
-    output $ renderHtml o
+  p <- getInputFPS "editedText"
+  p' <- getInput "editedText" >>= (\s -> return $  fromMaybe "" s)
+  r <- liftIO $ pmlcheck $ fromJust p
+  let o = page p' r in output o
 
 main :: IO ()
 main = runCGI $ cgiMain

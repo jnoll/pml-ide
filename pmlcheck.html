@@ -1,41 +1,104 @@
 <html>
- <head>
-  <title>PMLcheck Submit Form </title>
-  <style type="text/css" media="screen">
-    #editor {
-    height: 60%;
-    width: 50%;
-    border: 1px solid #DDD;
-    border-radius: 4px;
-    border-bottom-right-radius: 0px;
-    margin-top: 5px;
-    }
-  </style>
- </head>
+  <head>
+    <meta charset="utf-8"/>
+    <title>PMLcheck Submit Form </title>
 
- <body>
-  <form METHOD=POST ACTION="cgi-bin/pmlcheck.cgi" enctype="multipart/form-data">
-  <h1> PMLcheck Submit Form </h1>
-  <p> PML code to check:
-    <div id="editor" name="editedText" value="">
+<!--
+    <script src="https://code.jquery.com/jquery-3.0.0.js"
+            integrity="sha256-jrPLZ+8vDxt2FnE1zvZXCkCcebI/C8Dt5xyaQBjxQIo="
+	    crossorigin="anonymous"></script>
+    -->
+    <script src="https://code.jquery.com/jquery-2.2.4.js"
+	    integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+	    crossorigin="anonymous"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/codemirror.js" 
+	    type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/addon/edit/matchbrackets.js"
+	    type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/mode/tcl/tcl.js"
+	    type="text/javascript" charset="utf-8"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+	    type="text/javascript" charset="utf-8"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0//theme/eclipse.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/codemirror.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
+
+
+
+    <style type="text/css">
+      .CodeMirror {border: 1px solid black; font-size:13px}
+    </style>
+
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+	<div class="navbar-header">
+	  <a class="navbar-brand" href="#">PML-IDE</a>
+	</div>
+	<ul class="nav navbar-nav">
+	  <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">File<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+	      <li><a data-toggle="modal" data-target="#myModal">Upload File</a></li>
+            </ul>
+          </li>
+	  <li>
+	      <a href="#" id="compile">Check Syntax</a>
+	  </li>
+	</ul>
+      </div>
+    </nav>    
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+	<!-- Modal content-->
+	<div class="modal-content">
+	  <form class="form-inline" id="upload-form" method="post" enctype="multipart/form-data">
+	    <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Select File to Upload</h4>
+	    </div>
+
+	    <div class="modal-body">
+
+	      <div class="fileinput fileinput-new" data-provides="fileinput">
+		<span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" name="editedText"></span>
+		<span class="fileinput-filename"></span>
+	      </div>
+
+	      <div class="form-group"> 
+	      </div>
+
+	    </div>
+
+	    <div class="modal-footer">
+	      <button class="btn btn-primary" type="submit" name="op">Upload</button> 
+	      <button class="btn btn-primary" type="reset">Reset</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	    </div>
+	  </form>    
+	</div><!-- modal-content -->
+      </div><!-- modal-dialog -->
+    </div><!-- modal -->
+
+    <form id="edit-form"  method=POST enctype="multipart/form-data">
+      <textarea id="editor" name="editedText" value="process p {}"></textarea>
+      <!--
+      <input type="submit" name="op" value="Check Syntax"> 
+      -->
+    </form>
+
+    <div id="results">
     </div>
-  <p> <input type="submit" name="op" value="submit"> 
-  <input type=reset>
-  </form>
 
-  <form METHOD=POST ACTION="cgi-bin/pmlcheck.cgi" enctype="multipart/form-data">
-  <h1> PMLcheck Submit Form </h1>
-  <p> PML file to check: <input type="file" name="editedText"  size=128>
-  <p> <input type="submit" name="op" value="submit"> 
-  <input type=reset>
-  </form>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"
-  type="text/javascript" charset="utf-8"></script>
-  <script>
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/crimson_editor");
-    editor.getSession().setMode("ace/mode/tcl");
-    </script>
- </body>
+    <script src="pmlcheck.js"  type="text/javascript" charset="utf-8"></script>
+
+  </body>
 </html>
 

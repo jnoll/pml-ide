@@ -11,7 +11,7 @@ pages = $(wildcard *.html)
 scripts = $(wildcard *.hs)
 #cgi=$(STACK.dir)/pmlcheck.cgi
 cgi=$(patsubst %.hs,$(STACK.dir)/bin/%.cgi,$(scripts))
-
+js=$(wildcard *.js)
 
 all: install
 
@@ -26,6 +26,7 @@ what:
 install: build
 	install -m $(DIR_MODE) -d $(dir)
 	install -m $(FILE_MODE) $(pages) $(dir)
+	install -m $(FILE_MODE) $(js) $(dir)
 	install -m $(DIR_MODE) -d $(dir)/cgi-bin
 	install -m $(SCRIPT_MODE) $(cgi) $(dir)/cgi-bin
 
