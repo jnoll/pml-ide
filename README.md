@@ -14,35 +14,32 @@ editor.
 The PML ide is a CGI script written in haskell, and uses the
 [pmlcheck]() utility for syntax checking.
 
-0. Clone this repository.
+
 
 1. Install Haskell `stack`: follow the instructions at
 http://docs.haskellstack.org/en/stable/install_and_upgrade/.
-2. Create stack.yaml
+s2. Create stack.yaml
     cd pml-ide
     stack init
     stack setup
 
-3. Build  the pml-ide cgi script
+2. Clone this repository.
 
-    stack build
-    
-4. Install the pml-ide script and web pages.
+    git clone https://github.com/jnoll/pml-ide.git    
 
-    make install
+3. Clone the `peos` repository 
 
-5. Clone the `peos` repository
-
+    cd pml-ide
     git clone https://github.com/jnoll/peos.git
 
-6. Build `pmlcheck`.
+4. Build the pml-ide cgi script and `pmlcheck` utility.
 
-    cd peos/pml
-    make
-    
-7. Copy `pmlcheck` to ~/public_html/pml-ide
+    make build
 
-    cp check/pmlcheck ~/public_html/pml-ide
     
-8. Test: visit http://hostname/~install-account/pml-ide/pmlcheck.html
+5. Install the pml-ide script and web pages.
+
+    make install
+    
+6. Test: visit http://hostname/~install-account/pml-ide/pmlcheck.html
 

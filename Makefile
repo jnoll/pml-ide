@@ -9,7 +9,7 @@ public_html = $(HOME)/public_html
 dir = $(public_html)/pml-ide
 pages = $(wildcard *.html)
 scripts = $(wildcard *.hs)
-pmlcheck = $(HOME)/bin/pmlcheck
+pmlcheck = peos/pml/check/pmlcheck
 #cgi=$(STACK.dir)/pmlcheck.cgi
 cgi=$(patsubst %.hs,$(STACK.dir)/bin/%.cgi,$(scripts))
 js=$(wildcard *.js)
@@ -18,6 +18,7 @@ all: install
 
 build: 
 	stack build
+	make -C peos/pml 
 
 what:
 	@echo "scripts: $(scripts)"
