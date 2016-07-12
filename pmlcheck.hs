@@ -23,7 +23,7 @@ page p r = encodeJSON $ Result { input = p, results = r }
 pmlcheck :: BS.ByteString -> IO String
 pmlcheck pml = do
   (Just hin, Just hout, Just herr, jHandle) <-
-    createProcess (proc "/home/jnoll/bin/pmlcheck" [])
+    createProcess (proc "./pmlcheck" [])
            { cwd = Just "."
            , std_in = CreatePipe
            , std_out = CreatePipe

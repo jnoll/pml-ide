@@ -9,6 +9,7 @@ public_html = $(HOME)/public_html
 dir = $(public_html)/pml-ide
 pages = $(wildcard *.html)
 scripts = $(wildcard *.hs)
+pmlcheck = $(HOME)/bin/pmlcheck
 #cgi=$(STACK.dir)/pmlcheck.cgi
 cgi=$(patsubst %.hs,$(STACK.dir)/bin/%.cgi,$(scripts))
 js=$(wildcard *.js)
@@ -27,9 +28,10 @@ install: build
 	install -m $(DIR_MODE) -d $(dir)
 	install -m $(FILE_MODE) $(pages) $(dir)
 	install -m $(FILE_MODE) $(js) $(dir)
+	install -m $(FILE_MODE) htaccess $(dir)/.htaccess
 	install -m $(DIR_MODE) -d $(dir)/cgi-bin
 	install -m $(SCRIPT_MODE) $(cgi) $(dir)/cgi-bin
-
+	install -m $(SCRIPT_MODE) $(pmlcheck) $(dir)/cgi-bin
 
 %.cgi: %.hs
 	cabal exec ghc -- --make ${LDFLAGS} $< -o $@
