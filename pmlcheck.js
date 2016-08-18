@@ -4,6 +4,8 @@ var myCodeMirror;
 $(document).ready(function() { 
   myCodeMirror = CodeMirror.fromTextArea(document.getElementById('editor'),{
       lineNumbers: true
+      , tabSize: 8
+      , indentWithTabs: true
       , styleActiveLine: true
       , matchBrackets: true
       , mode: "tcl"

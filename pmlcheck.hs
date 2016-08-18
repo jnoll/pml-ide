@@ -39,14 +39,14 @@ pmlcheck pml = do
     then case result of
        Right c -> return c
        Left e -> if isEOFError e
-                then return ""
-                else ioError e
+                 then return ""
+                 else ioError e
 
      else case err of
        Right c -> return c
        Left e -> if isEOFError e
-                then return ""
-                else ioError e
+                 then return ""
+                 else ioError e
 
 
 cgiMain :: CGI CGIResult
